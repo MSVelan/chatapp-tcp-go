@@ -81,9 +81,11 @@ func (s *server) listRooms(c *client, args []string) {
 }
 
 func (s *server) msg(c *client, args []string) {
-	if c.room != nil {
-		c.err(errors.New("You must join a room first"))
+	if c.room == nil {
+		c.err(errors.New("you must join a room first"))
+		return
 	}
+	log.Printf("Current room: %s", c.room.name)
 	c.room.broadcast(c, c.nick+": "+strings.Join(args[1:len(args)], " "))
 }
 
